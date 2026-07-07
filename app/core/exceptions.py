@@ -22,5 +22,5 @@ class TripLimitsNotSetError(DomainException):
 class UserNotInTripError(DomainException):
     message = "User is not a member of this trip."
 
-class InvalidTripLimitsError(DomainException):
-    message = "Trip limits must include exactly one entry per category."
+class InvalidTripExpenseCategoryError(DomainException):
+    message = "Specified trip expense category doesn't exist"

@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from app.core.db import init_db
 from app.core.exceptions import (
     DomainException,
-    InvalidTripLimitsError,
+    InvalidTripExpenseCategoryError,
     TripLimitsNotSetError,
     TripNotFoundError,
     UserNotFoundError,
@@ -23,7 +23,7 @@ EXCEPTION_STATUS_MAP: dict[type[DomainException], int] = {
     UserNotFoundError: 404,
     TripLimitsNotSetError: 409,
     UserNotInTripError: 403,
-    InvalidTripLimitsError: 400,
+    InvalidTripExpenseCategoryError: 400,
 }
 
 
