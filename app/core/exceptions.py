@@ -10,17 +10,22 @@ class DomainException(Exception):
             self.message = message
         super().__init__(self.message)
 
+
 class TripNotFoundError(DomainException):
     message = "Trip not found."
+
 
 class UserNotFoundError(DomainException):
     message = "User not found."
 
+
 class TripLimitsNotSetError(DomainException):
     message = "Trip limits have not been set."
 
+
 class UserNotInTripError(DomainException):
     message = "User is not a member of this trip."
+
 
 class InvalidTripExpenseCategoryError(DomainException):
     message = "Specified trip expense category doesn't exist"

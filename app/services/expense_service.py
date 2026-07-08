@@ -63,4 +63,6 @@ class ExpenseService:
         day: date | None = None,
     ) -> list[Expense]:
         self._ensure_trip_exists(trip_id)
-        return self.expense_repo.list(trip_id, user_id=user_id, category=category, day=day)
+        return self.expense_repo.list(
+            trip_id, user_id=user_id, category=category, day=day
+        )

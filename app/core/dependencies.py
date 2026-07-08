@@ -13,11 +13,11 @@ from app.services.summary_service import SummaryService
 from app.services.trip_service import TripService
 from app.services.user_service import UserService
 
-
 # --- Repositories ---
 # Each takes the same per-request Session (FastAPI caches Depends results
 # within a single request), so all repository writes in one request share
 # a transaction.
+
 
 def get_user_repository(session: Session = Depends(get_session)) -> UserRepository:
     return UserRepository(session)
@@ -27,19 +27,26 @@ def get_trip_repository(session: Session = Depends(get_session)) -> TripReposito
     return TripRepository(session)
 
 
-def get_trip_user_repository(session: Session = Depends(get_session)) -> TripUserRepository:
+def get_trip_user_repository(
+    session: Session = Depends(get_session),
+) -> TripUserRepository:
     return TripUserRepository(session)
 
 
-def get_trip_limit_repository(session: Session = Depends(get_session)) -> TripLimitRepository:
+def get_trip_limit_repository(
+    session: Session = Depends(get_session),
+) -> TripLimitRepository:
     return TripLimitRepository(session)
 
 
-def get_expense_repository(session: Session = Depends(get_session)) -> ExpenseRepository:
+def get_expense_repository(
+    session: Session = Depends(get_session),
+) -> ExpenseRepository:
     return ExpenseRepository(session)
 
 
 # --- Services ---
+
 
 def get_user_service(
     user_repo: UserRepository = Depends(get_user_repository),

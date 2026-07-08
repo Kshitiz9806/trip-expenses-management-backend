@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class CategoryEnum(str, Enum):
     FOOD = "food"
     CABS = "cabs"
