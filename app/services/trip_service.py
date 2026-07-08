@@ -33,7 +33,9 @@ class TripService:
     @staticmethod
     def _validate_limits(limits: list[tuple[CategoryEnum, float]]) -> None:
         categories = [category for category, _ in limits]
-        if not set(categories).issubset(set(CategoryEnum)):
+        if not categories or not set(categories).issubset(set(CategoryEnum)):
+            raise InvalidTripExpenseCategoryError()
+        if len(categories) != len(set(categories)):
             raise InvalidTripExpenseCategoryError()
 
     def create_trip(
@@ -82,3 +84,8 @@ class TripService:
     def get_trip_limits(self, trip_id: uuid.UUID) -> list[TripLimit]:
         self.get_trip(trip_id)  # raises TripNotFoundError if missing
         return self.trip_limit_repo.get_by_trip(trip_id)
+
+    def get_trips_for_user(self, user_id: uuid.UUID) -> list[Trip]:
+        if self.user_repo.get_by_id(user_id) is None:
+            raise UserNotFoundError()
+        return self.trip_user_repo.get_trips_for_user(user_id)

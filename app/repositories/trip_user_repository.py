@@ -2,6 +2,7 @@ import uuid
 
 from sqlmodel import Session, select
 
+from app.models.trip import Trip
 from app.models.trip_user import TripUser
 from app.models.user import User
 
@@ -31,5 +32,13 @@ class TripUserRepository:
             select(User)
             .join(TripUser, TripUser.user_id == User.id)
             .where(TripUser.trip_id == trip_id)
+        )
+        return list(self.session.exec(statement).all())
+
+    def get_trips_for_user(self, user_id: uuid.UUID) -> list[Trip]:
+        statement = (
+            select(Trip)
+            .join(TripUser, TripUser.trip_id == Trip.id)
+            .where(TripUser.user_id == user_id)
         )
         return list(self.session.exec(statement).all())

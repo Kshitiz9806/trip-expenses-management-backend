@@ -41,3 +41,11 @@ class TripUserResponse(BaseModel):
     trip_id: uuid.UUID
     user_id: uuid.UUID
     joined_at: datetime
+
+class TripSummaryItem(BaseModel):
+    id: uuid.UUID
+    name: str
+    start_date: date
+
+class UserTripsResponse(BaseModel):
+    trips: list[TripSummaryItem]
