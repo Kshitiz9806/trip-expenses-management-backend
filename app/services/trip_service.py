@@ -51,7 +51,9 @@ class TripService:
 
         self._validate_limits(limits)
         limits_dict = dict(limits)
-        trip_limits = [(category, limits_dict.get(category, 0.0)) for category in CategoryEnum]
+        trip_limits = [
+            (category, limits_dict.get(category, 0.0)) for category in CategoryEnum
+        ]
 
         trip = self.trip_repo.create(name=name, start_date=start_date)
         self.trip_limit_repo.replace_all(trip.id, trip_limits)

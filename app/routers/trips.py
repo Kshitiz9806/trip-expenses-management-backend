@@ -11,7 +11,7 @@ from app.schemas.trip import (
     TripResponse,
     TripSummaryItem,
     TripUserResponse,
-     UserTripsResponse,
+    UserTripsResponse,
 )
 from app.schemas.user import UserResponse
 from app.services.trip_service import TripService
@@ -29,7 +29,9 @@ def _build_trip_response(trip_service: TripService, trip_id: uuid.UUID) -> TripR
         start_date=trip.start_date,
         created_at=trip.created_at,
         limits=[
-            TripLimitInput(category=limit.category, daily_limit_amount=limit.daily_limit_amount)
+            TripLimitInput(
+                category=limit.category, daily_limit_amount=limit.daily_limit_amount
+            )
             for limit in limits
         ],
         users=[UserResponse(id=user.id, name=user.name) for user in users],
@@ -46,8 +48,12 @@ def list_trips_for_user(
     GET /trips/{trip_id} for full detail once a trip is selected."""
     trips = trip_service.get_trips_for_user(user_id)
     return UserTripsResponse(
-        trips=[TripSummaryItem(id=t.id, name=t.name, start_date=t.start_date) for t in trips]
+        trips=[
+            TripSummaryItem(id=t.id, name=t.name, start_date=t.start_date)
+            for t in trips
+        ]
     )
+
 
 @router.post("", response_model=TripResponse, status_code=201)
 def create_trip(
@@ -97,7 +103,9 @@ def set_trip_limits(
     return TripLimitsResponse(
         trip_id=trip_id,
         limits=[
-            TripLimitInput(category=limit.category, daily_limit_amount=limit.daily_limit_amount)
+            TripLimitInput(
+                category=limit.category, daily_limit_amount=limit.daily_limit_amount
+            )
             for limit in updated
         ],
     )

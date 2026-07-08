@@ -23,7 +23,9 @@ class SummaryService:
         self.trip_user_repo = trip_user_repo
         self.trip_limit_repo = trip_limit_repo
 
-    def get_summary(self, trip_id: uuid.UUID, day: date | None = None) -> TripSummaryResult:
+    def get_summary(
+        self, trip_id: uuid.UUID, day: date | None = None
+    ) -> TripSummaryResult:
         trip = self.trip_repo.get_by_id(trip_id)
         if trip is None:
             raise TripNotFoundError()

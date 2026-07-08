@@ -3,7 +3,11 @@ import uuid
 from fastapi import APIRouter, Depends
 
 from app.core.dependencies import get_suggest_payer_service
-from app.schemas.suggest_payer import PayerCandidate, SuggestPayerRequest, SuggestPayerResponse
+from app.schemas.suggest_payer import (
+    PayerCandidate,
+    SuggestPayerRequest,
+    SuggestPayerResponse,
+)
 from app.services.suggest_payer_service import SuggestPayerService
 
 router = APIRouter(prefix="/trips", tags=["suggest-payer"])
@@ -15,7 +19,9 @@ def suggest_payer(
     payload: SuggestPayerRequest,
     service: SuggestPayerService = Depends(get_suggest_payer_service),
 ) -> SuggestPayerResponse:
-    result = service.suggest_payer(trip_id, category=payload.category, day=payload.day, amount=payload.amount)
+    result = service.suggest_payer(
+        trip_id, category=payload.category, day=payload.day, amount=payload.amount
+    )
     return SuggestPayerResponse(
         suggested_user_id=result.suggested_user_id,
         candidates=[

@@ -24,7 +24,11 @@ class SuggestPayerService:
         self.trip_limit_repo = trip_limit_repo
 
     def suggest_payer(
-        self, trip_id: uuid.UUID, category: CategoryEnum, day, amount: float | None = None
+        self,
+        trip_id: uuid.UUID,
+        category: CategoryEnum,
+        day,
+        amount: float | None = None,
     ) -> SuggestPayerResult:
         if self.trip_repo.get_by_id(trip_id) is None:
             raise TripNotFoundError()

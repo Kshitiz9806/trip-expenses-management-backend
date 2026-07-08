@@ -5,7 +5,11 @@ from fastapi import APIRouter, Depends, Query
 
 from app.core.dependencies import get_expense_service
 from app.core.enums import CategoryEnum
-from app.schemas.expense import CreateExpenseRequest, ExpenseListResponse, ExpenseResponse
+from app.schemas.expense import (
+    CreateExpenseRequest,
+    ExpenseListResponse,
+    ExpenseResponse,
+)
 from app.services.expense_service import ExpenseService
 
 router = APIRouter(prefix="/trips", tags=["expenses"])
@@ -50,5 +54,7 @@ def list_expenses(
     day: date | None = Query(default=None),
     expense_service: ExpenseService = Depends(get_expense_service),
 ) -> ExpenseListResponse:
-    expenses = expense_service.list_expenses(trip_id, user_id=user_id, category=category, day=day)
+    expenses = expense_service.list_expenses(
+        trip_id, user_id=user_id, category=category, day=day
+    )
     return ExpenseListResponse(expenses=[_to_expense_response(e) for e in expenses])

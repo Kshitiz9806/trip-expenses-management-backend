@@ -23,10 +23,11 @@ class TripLimitRepository:
             existing_row = existing_by_category.get(category)
             if existing_row is not None:
                 self.session.delete(existing_row)
-            self.session.add(TripLimit(trip_id=trip_id, category=category, daily_limit_amount=amount))
+            self.session.add(
+                TripLimit(trip_id=trip_id, category=category, daily_limit_amount=amount)
+            )
         self.session.commit()
         return self.get_by_trip(trip_id=trip_id)
-        
 
     def replace_all(
         self, trip_id: uuid.UUID, limits: list[tuple[CategoryEnum, float]]
