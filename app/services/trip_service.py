@@ -3,7 +3,7 @@ from datetime import date
 
 from app.core.enums import CategoryEnum
 from app.core.exceptions import (
-    InvalidTripLimitsError,
+    InvalidTripExpenseCategoryError,
     TripNotFoundError,
     UserNotFoundError,
 )
@@ -33,8 +33,8 @@ class TripService:
     @staticmethod
     def _validate_limits(limits: list[tuple[CategoryEnum, float]]) -> None:
         categories = [category for category, _ in limits]
-        if set(categories) != set(CategoryEnum) or len(categories) != len(CategoryEnum):
-            raise InvalidTripLimitsError()
+        if not set(categories).issubset(set(CategoryEnum)):
+            raise InvalidTripExpenseCategoryError()
 
     def create_trip(
         self,
@@ -48,9 +48,11 @@ class TripService:
             raise UserNotFoundError()
 
         self._validate_limits(limits)
+        limits_dict = dict(limits)
+        trip_limits = [(category, limits_dict.get(category, 0.0)) for category in CategoryEnum]
 
         trip = self.trip_repo.create(name=name, start_date=start_date)
-        self.trip_limit_repo.replace_all(trip.id, limits)
+        self.trip_limit_repo.replace_all(trip.id, trip_limits)
         self.trip_user_repo.add(trip.id, creator_user_id)
         return trip
 
@@ -71,7 +73,7 @@ class TripService:
     ) -> list[TripLimit]:
         self.get_trip(trip_id)  # raises TripNotFoundError if missing
         self._validate_limits(limits)
-        return self.trip_limit_repo.replace_all(trip_id, limits)
+        return self.trip_limit_repo.replace_limit(trip_id, limits)
 
     def get_trip_users(self, trip_id: uuid.UUID) -> list[User]:
         self.get_trip(trip_id)  # raises TripNotFoundError if missing

@@ -14,6 +14,20 @@ class TripLimitRepository:
         statement = select(TripLimit).where(TripLimit.trip_id == trip_id)
         return list(self.session.exec(statement).all())
 
+    def replace_limit(
+        self, trip_id: uuid.UUID, limits: list[tuple[CategoryEnum, float]]
+    ) -> list[TripLimit]:
+        existing_limits = self.get_by_trip(trip_id)
+        for row in existing_limits:
+            for category, limit_amount in limits:
+                if row.category == category:
+                    self.session.delete(row)
+                    new_row = TripLimit(trip_id=trip_id, category=category, daily_limit_amount=limit_amount)
+                    self.session.add(new_row)
+                    self.session.commit()
+        return self.get_by_trip(trip_id=trip_id)
+        
+
     def replace_all(
         self, trip_id: uuid.UUID, limits: list[tuple[CategoryEnum, float]]
     ) -> list[TripLimit]:
