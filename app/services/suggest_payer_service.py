@@ -24,7 +24,7 @@ class SuggestPayerService:
         self.trip_limit_repo = trip_limit_repo
 
     def suggest_payer(
-        self, trip_id: uuid.UUID, category: CategoryEnum, amount: float | None = None
+        self, trip_id: uuid.UUID, category: CategoryEnum, day, amount: float | None = None
     ) -> SuggestPayerResult:
         if self.trip_repo.get_by_id(trip_id) is None:
             raise TripNotFoundError()
@@ -37,8 +37,7 @@ class SuggestPayerService:
 
         # Always evaluated against today — a suggestion for a backdated
         # expense doesn't make sense, since that money is already spent.
-        today = date.today()
-        today_expenses = self.expense_repo.list(trip_id, category=category, day=today)
+        today_expenses = self.expense_repo.list(trip_id, category=category, day=day)
 
         users = self.trip_user_repo.get_users_for_trip(trip_id)
 

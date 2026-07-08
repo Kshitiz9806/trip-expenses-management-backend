@@ -15,7 +15,7 @@ def suggest_payer(
     payload: SuggestPayerRequest,
     service: SuggestPayerService = Depends(get_suggest_payer_service),
 ) -> SuggestPayerResponse:
-    result = service.suggest_payer(trip_id, category=payload.category, amount=payload.amount)
+    result = service.suggest_payer(trip_id, category=payload.category, day=payload.day, amount=payload.amount)
     return SuggestPayerResponse(
         suggested_user_id=result.suggested_user_id,
         candidates=[

@@ -1,12 +1,14 @@
 import uuid
 
 from pydantic import BaseModel
+from datetime import date
 
 from app.core.enums import CategoryEnum
 
 
 class SuggestPayerRequest(BaseModel):
     category: CategoryEnum
+    day: date
     amount: float | None = None  # if provided, filters out users who'd bust their limit
 
 

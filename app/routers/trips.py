@@ -9,7 +9,9 @@ from app.schemas.trip import (
     TripLimitInput,
     TripLimitsResponse,
     TripResponse,
+    TripSummaryItem,
     TripUserResponse,
+     UserTripsResponse,
 )
 from app.schemas.user import UserResponse
 from app.services.trip_service import TripService
@@ -33,6 +35,19 @@ def _build_trip_response(trip_service: TripService, trip_id: uuid.UUID) -> TripR
         users=[UserResponse(id=user.id, name=user.name) for user in users],
     )
 
+
+@router.get("", response_model=UserTripsResponse)
+def list_trips_for_user(
+    user_id: uuid.UUID,
+    trip_service: TripService = Depends(get_trip_service),
+) -> UserTripsResponse:
+    """Returns the trips a given user has joined, for the frontend's home
+    screen (trip picker). Returns lightweight items only — call
+    GET /trips/{trip_id} for full detail once a trip is selected."""
+    trips = trip_service.get_trips_for_user(user_id)
+    return UserTripsResponse(
+        trips=[TripSummaryItem(id=t.id, name=t.name, start_date=t.start_date) for t in trips]
+    )
 
 @router.post("", response_model=TripResponse, status_code=201)
 def create_trip(
