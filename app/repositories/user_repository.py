@@ -9,8 +9,8 @@ class UserRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def create(self, name: str) -> User:
-        user = User(name=name)
+    def create(self, name: str, passkey: str) -> User:
+        user = User(name=name, passkey=passkey)
         self.session.add(user)
         self.session.commit()
         self.session.refresh(user)
@@ -24,3 +24,7 @@ class UserRepository:
             return []
         statement = select(User).where(User.id.in_(user_ids))
         return list(self.session.exec(statement).all())
+
+    def get_by_name_and_passkey(self, name: str, passkey: str) -> User | None:
+        statement = select(User).where(User.name == name, User.passkey == passkey)
+        return self.session.exec(statement).first()
