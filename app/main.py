@@ -16,7 +16,7 @@ from app.core.exceptions import (
 from app.routers import expenses, suggest_payer, summary, trips, users
 
 import os
-import dotenv
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -41,7 +41,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Trip Expense Tracker API", lifespan=lifespan)
 
-FRONTEND_URL = os.getenv("FRONTEND_URL")
+FRONTEND_URL = os.getenv("FRONTEND_API_URL")
+
+print(FRONTEND_URL)
 
 # Dev-time CORS: allows the Vite dev server (localhost and LAN IP, since
 # you're testing from a phone on the same network) to call this API.
