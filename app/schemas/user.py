@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class CreateUserRequest(BaseModel):
     name: str
+    passkey: str
 
 
 class UserResponse(BaseModel):
