@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.db import init_db
@@ -14,11 +13,6 @@ from app.core.exceptions import (
     UserNotInTripError,
 )
 from app.routers import expenses, suggest_payer, summary, trips, users
-
-import os
-import dotenv
-
-load_dotenv()
 
 # Maps each domain exception to its HTTP status code. A single handler below
 # (registered on the DomainException base class) catches every subclass via
@@ -40,20 +34,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Trip Expense Tracker API", lifespan=lifespan)
-
-FRONTEND_URL = os.getenv("FRONTEND_URL")
-
-# Dev-time CORS: allows the Vite dev server (localhost and LAN IP, since
-# you're testing from a phone on the same network) to call this API.
-# allow_origins=["*"] is fine here since there's no auth/cookies involved
-# (allow_credentials must be False when using a wildcard origin).
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 @app.exception_handler(DomainException)
