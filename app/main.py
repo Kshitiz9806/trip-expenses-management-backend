@@ -43,8 +43,6 @@ app = FastAPI(title="Trip Expense Tracker API", lifespan=lifespan)
 
 FRONTEND_URL = os.getenv("FRONTEND_API_URL")
 
-print(FRONTEND_URL)
-
 # Dev-time CORS: allows the Vite dev server (localhost and LAN IP, since
 # you're testing from a phone on the same network) to call this API.
 # allow_origins=["*"] is fine here since there's no auth/cookies involved
